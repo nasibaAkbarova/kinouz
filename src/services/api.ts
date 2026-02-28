@@ -1,4 +1,4 @@
-import { Movie } from "../types/movie";
+import {type Movie } from "../types/movie";
 
 export interface MovieWithTrailer extends Movie {
   trailer_url: string;

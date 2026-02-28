@@ -1,7 +1,6 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFavorites } from '../../context/FavoritesContext';
-import MovieCard from '../../app/components/MovieCard';
+import MovieCard from '../../components/MovieCard';
 
 const Favorites = () => {
   const { t } = useTranslation();

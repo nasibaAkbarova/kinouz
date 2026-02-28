@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getMovieById, MovieWithTrailer } from '../../services/api';
-import { Play, Plus, ThumbsUp, ChevronLeft, Check } from 'lucide-react';
+import { getMovieById, type MovieWithTrailer } from '../../services/api';
+import { FaPlay, FaPlus, FaThumbsUp, FaChevronLeft, FaCheck } from 'react-icons/fa';
 import { useFavorites } from '../../context/FavoritesContext';
 import { toast } from 'react-toastify';
 
@@ -90,7 +90,7 @@ const MovieDetail = () => {
         onClick={() => navigate(-1)} 
         className="flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition"
       >
-        <ChevronLeft size={20} /> Orqaga
+        <FaChevronLeft size={18} /> Orqaga
       </button>
 
       <div className="flex flex-col lg:flex-row gap-12">
@@ -129,7 +129,7 @@ const MovieDetail = () => {
                 onClick={scrollToPlayer}
                 className="flex items-center gap-2 bg-white text-black px-8 py-3 rounded font-bold hover:bg-white/90 transition"
               >
-                <Play fill="black" size={20} /> Tomosha qilish
+                <FaPlay size={18} /> Tomosha qilish
               </button>
               <button 
                 onClick={toggleFavorite}
@@ -137,7 +137,7 @@ const MovieDetail = () => {
                   isFavorite(movie.id) ? 'bg-white border-white text-black' : 'border-gray-600 text-white hover:border-white'
                 }`}
               >
-                {isFavorite(movie.id) ? <Check size={24} /> : <Plus size={24} />}
+                {isFavorite(movie.id) ? <FaCheck size={20} /> : <FaPlus size={20} />}
               </button>
               <button 
                 onClick={toggleFavorite}
@@ -145,7 +145,7 @@ const MovieDetail = () => {
                   isFavorite(movie.id) ? 'bg-red-600 border-red-600 text-white' : 'border-gray-600 text-white hover:border-white'
                 }`}
               >
-                <ThumbsUp size={24} fill={isFavorite(movie.id) ? "white" : "none"} />
+                <FaThumbsUp size={20} />
               </button>
             </div>
 

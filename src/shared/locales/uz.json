@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "home": "Bosh sahifa",
+    "movies": "Filmlar",
+    "favorites": "Sevimlilar",
+    "about": "Biz haqimizda"
+  },
+  "home": {
+    "hero_title": "Cheksiz filmlar va seriallar",
+    "hero_subtitle": "Istalgan joyda tomosha qiling. Istalgan vaqtda bekor qiling.",
+    "play": "Tomosha qilish",
+    "more_info": "Batafsil"
+  },
+  "movies": {
+    "trending": "Trenddagilar",
+    "top_rated": "Eng yuqori baholangan",
+    "animations": "Multfilmlar",
+    "doramas": "Doramalar",
+    "action": "Jangari",
+    "adventure": "Sarguzasht",
+    "comedy": "Komediya",
+    "upcoming": "Tez kunda",
+    "search_placeholder": "Filmlarni qidirish..."
+  }
+}

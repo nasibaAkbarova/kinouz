@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { ChevronRight } from 'lucide-react';
+import { FaChevronRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import Accordion from '../../app/components/Accordion';
+import Accordion from '../../components/Accordion';
 
 const LandingPage: React.FC = () => {
   const [identifier, setIdentifier] = useState('');
@@ -10,7 +10,6 @@ const LandingPage: React.FC = () => {
   const handleGetStarted = (e: React.FormEvent) => {
     e.preventDefault();
     if (identifier.trim()) {
-      // Navigate to login/password page with the identifier
       navigate('/login', { state: { identifier } });
     }
   };
@@ -53,7 +52,7 @@ const LandingPage: React.FC = () => {
             type="submit"
             className="bg-red-600 hover:bg-red-700 transition px-8 py-4 md:py-5 rounded text-xl md:text-2xl font-bold flex items-center justify-center gap-2"
           >
-            Boshlash <ChevronRight size={28} />
+            Boshlash <FaChevronRight size={24} />
           </button>
         </form>
       </div>

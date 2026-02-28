@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import SearchBar from '../../app/components/SearchBar';
-import GenreFilter from '../../app/components/GenreFilter';
-import MovieCard from '../../app/components/MovieCard';
-import { getTrendingMovies, getMoviesByGenre, searchMovies, MovieWithTrailer } from '../../services/api';
+import SearchBar from '../../components/SearchBar';
+import GenreFilter from '../../components/GenreFilter';
+import MovieCard from '../../components/MovieCard';
+import { getTrendingMovies, getMoviesByGenre, searchMovies, type MovieWithTrailer } from '../../services/api';
 
 const Movies = () => {
   const { t } = useTranslation();

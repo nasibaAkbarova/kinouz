@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "home": "Главная",
+    "movies": "Фильмы",
+    "favorites": "Избранное",
+    "about": "О нас"
+  },
+  "home": {
+    "hero_title": "Безлимитные фильмы и сериалы",
+    "hero_subtitle": "Смотрите где угодно. Отменяйте когда угодно.",
+    "play": "Смотреть",
+    "more_info": "Подробнее"
+  },
+  "movies": {
+    "trending": "В тренде",
+    "top_rated": "Лучшие",
+    "animations": "Мультфильмы",
+    "doramas": "Дорамы",
+    "action": "Боевик",
+    "adventure": "Приключения",
+    "comedy": "Комедия",
+    "upcoming": "Скоро",
+    "search_placeholder": "Поиск фильмов..."
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "home": "Home",
+    "movies": "Movies",
+    "favorites": "Favorites",
+    "about": "About"
+  },
+  "home": {
+    "hero_title": "Unlimited movies, TV shows, and more",
+    "hero_subtitle": "Watch anywhere. Cancel anytime.",
+    "play": "Play",
+    "more_info": "More Info"
+  },
+  "movies": {
+    "trending": "Trending Now",
+    "top_rated": "Top Rated",
+    "animations": "Animations",
+    "doramas": "Doramas",
+    "action": "Action",
+    "adventure": "Adventure",
+    "comedy": "Comedy",
+    "upcoming": "Upcoming",
+    "search_placeholder": "Search movies..."
+  }
+}

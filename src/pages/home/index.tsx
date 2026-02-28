@@ -1,17 +1,78 @@
-import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Play, Info } from 'lucide-react';
 import { motion } from 'motion/react';
-import MovieCard from '../../app/components/MovieCard';
-import { getTrendingMovies, getAnimations, getDoramas, getMoviesByGenre, MovieWithTrailer } from '../../services/api';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import Accordion from '../../app/components/Accordion';
+import { useNavigate } from 'react-router-dom';
+import MovieCard from '../../components/MovieCard';
+import { getTrendingMovies, getAnimations, getDoramas, getMoviesByGenre, type MovieWithTrailer } from '../../services/api';
+import Accordion from '../../components/Accordion';
+import { FaInfo, FaPlay, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { useEffect, useState, useRef } from 'react';
+
+// ✅ Swiper o'rniga o'z Carousel componentimiz
+const MovieRow = ({ title, data }: { title: string; data: MovieWithTrailer[] }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const SCROLL_AMOUNT = 900;
+
+  const scrollLeft = () => {
+    containerRef.current?.scrollBy({ left: -SCROLL_AMOUNT, behavior: 'smooth' });
+  };
+
+  const scrollRight = () => {
+    containerRef.current?.scrollBy({ left: SCROLL_AMOUNT, behavior: 'smooth' });
+  };
+
+  return (
+    <section className="relative group/row">
+      <h2 className="text-xl md:text-2xl font-bold mb-4 hover:text-gray-300 cursor-pointer inline-flex items-center gap-2 group">
+        {title}
+        <span className="text-xs text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity">Explore All ›</span>
+      </h2>
+
+      <div className="relative">
+        {/* Chap tugma */}
+        <button
+          onClick={scrollLeft}
+          className="absolute left-0 top-0 bottom-0 z-10 w-12 bg-gradient from-[#141414] to-transparent flex items-center justify-start pl-1 opacity-0 group-hover/row:opacity-100 transition-opacity"
+        >
+          <div className="w-8 h-8 bg-black/70 rounded-full flex items-center justify-center hover:bg-black transition border border-white/10">
+            <FaChevronLeft size={14} />
+          </div>
+        </button>
+
+        {/* Filmlar */}
+        <div
+          ref={containerRef}
+          className="flex gap-3 overflow-x-auto scroll-smooth scrollbar-hide"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {data.map((movie) => (
+            <div key={movie.id} className="flex-none w-[calc(33.333%-8px)] sm:w-[calc(25%-9px)] md:w-[calc(16.666%-10px)]">
+              <MovieCard
+                id={movie.id}
+                title={movie.title}
+                image={movie.poster_path}
+                trailerUrl={movie.trailer_url}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* O'ng tugma */}
+        <button
+          onClick={scrollRight}
+          className="absolute right-0 top-0 bottom-0 z-10 w-12 bg-gradient from-[#141414] to-transparent flex items-center justify-end pr-1 opacity-0 group-hover/row:opacity-100 transition-opacity"
+        >
+          <div className="w-8 h-8 bg-black/70 rounded-full flex items-center justify-center hover:bg-black transition border border-white/10">
+            <FaChevronRight size={14} />
+          </div>
+        </button>
+      </div>
+    </section>
+  );
+};
 
 const Home = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [movies, setMovies] = useState<MovieWithTrailer[]>([]);
   const [animations, setAnimations] = useState<MovieWithTrailer[]>([]);
   const [doramas, setDoramas] = useState<MovieWithTrailer[]>([]);
@@ -27,9 +88,9 @@ const Home = () => {
           getTrendingMovies(),
           getAnimations(),
           getDoramas(),
-          getMoviesByGenre(28), // Action
-          getMoviesByGenre(12), // Adventure
-          getMoviesByGenre(35)  // Comedy
+          getMoviesByGenre(28),
+          getMoviesByGenre(12),
+          getMoviesByGenre(35)
         ]);
         setMovies(moviesData);
         setAnimations(animationsData);
@@ -68,7 +129,7 @@ const Home = () => {
             referrerPolicy="no-referrer"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-black/40" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#141414] via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#141414]" />
         </div>
 
         <div className="absolute bottom-[25%] left-4 md:left-12 max-w-2xl space-y-4">
@@ -80,16 +141,16 @@ const Home = () => {
             <div className="w-6 h-6 bg-red-600 rounded-sm flex items-center justify-center font-bold text-[10px]">N</div>
             <span className="text-gray-300 font-bold tracking-[0.3em] text-xs uppercase">Series</span>
           </motion.div>
-          
-          <motion.h1 
+
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-7xl font-extrabold tracking-tight"
           >
             {heroMovie?.title || t('home.hero_title')}
           </motion.h1>
-          
-          <motion.p 
+
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
@@ -97,19 +158,25 @@ const Home = () => {
           >
             {heroMovie?.overview || t('home.hero_subtitle')}
           </motion.p>
-          
-          <motion.div 
+
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             className="flex items-center gap-3 pt-2"
           >
-            <button className="flex items-center gap-2 bg-white text-black px-8 py-2.5 rounded font-bold hover:bg-white/90 transition shadow-lg">
-              <Play fill="black" size={24} />
+            <button
+              onClick={() => heroMovie && navigate(`/movie/${heroMovie.id}`)}
+              className="flex items-center gap-2 bg-white text-black px-8 py-2.5 rounded font-bold hover:bg-white/90 transition shadow-lg"
+            >
+              <FaPlay size={18} />
               {t('home.play')}
             </button>
-            <button className="flex items-center gap-2 bg-gray-500/50 text-white px-8 py-2.5 rounded font-bold hover:bg-gray-500/40 transition backdrop-blur-md border border-white/10">
-              <Info size={24} />
+            <button
+              onClick={() => heroMovie && navigate(`/movie/${heroMovie.id}`)}
+              className="flex items-center gap-2 bg-gray-500/50 text-white px-8 py-2.5 rounded font-bold hover:bg-gray-500/40 transition backdrop-blur-md border border-white/10"
+            >
+              <FaInfo size={18} />
               {t('home.more_info')}
             </button>
           </motion.div>
@@ -118,219 +185,16 @@ const Home = () => {
 
       {/* Content Rows */}
       <div className="px-4 md:px-12 -mt-32 relative z-10 pb-20 space-y-12">
-        <section>
-          <h2 className="text-xl md:text-2xl font-bold mb-4 hover:text-gray-300 cursor-pointer inline-flex items-center gap-2 group">
-            {t('movies.trending')}
-            <span className="text-xs text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity">Explore All ›</span>
-          </h2>
-          <Swiper
-            modules={[Navigation]}
-            navigation
-            spaceBetween={16}
-            slidesPerView={2}
-            breakpoints={{
-              640: { slidesPerView: 3 },
-              768: { slidesPerView: 4 },
-              1024: { slidesPerView: 6 },
-            }}
-            className="movie-swiper"
-          >
-            {movies.map((movie) => (
-              <SwiperSlide key={movie.id}>
-                <MovieCard 
-                  id={movie.id} 
-                  title={movie.title} 
-                  image={movie.poster_path} 
-                  trailerUrl={movie.trailer_url}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </section>
+        <MovieRow title={t('movies.trending')} data={movies} />
+        <MovieRow title={t('movies.animations')} data={animations} />
+        <MovieRow title={t('movies.doramas')} data={doramas} />
+        <MovieRow title={t('movies.action')} data={actionMovies} />
+        <MovieRow title={t('movies.adventure')} data={adventureMovies} />
+        <MovieRow title={t('movies.comedy')} data={comedyMovies} />
+        <MovieRow title={t('movies.top_rated')} data={[...movies].reverse()} />
 
-        <section>
-          <h2 className="text-xl md:text-2xl font-bold mb-4 hover:text-gray-300 cursor-pointer inline-flex items-center gap-2 group">
-            {t('movies.animations')}
-            <span className="text-xs text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity">Explore All ›</span>
-          </h2>
-          <Swiper
-            modules={[Navigation]}
-            navigation
-            spaceBetween={16}
-            slidesPerView={2}
-            breakpoints={{
-              640: { slidesPerView: 3 },
-              768: { slidesPerView: 4 },
-              1024: { slidesPerView: 6 },
-            }}
-            className="movie-swiper"
-          >
-            {animations.map((movie) => (
-              <SwiperSlide key={movie.id}>
-                <MovieCard 
-                  id={movie.id} 
-                  title={movie.title} 
-                  image={movie.poster_path} 
-                  trailerUrl={movie.trailer_url}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </section>
-
-        <section>
-          <h2 className="text-xl md:text-2xl font-bold mb-4 hover:text-gray-300 cursor-pointer inline-flex items-center gap-2 group">
-            {t('movies.doramas')}
-            <span className="text-xs text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity">Explore All ›</span>
-          </h2>
-          <Swiper
-            modules={[Navigation]}
-            navigation
-            spaceBetween={16}
-            slidesPerView={2}
-            breakpoints={{
-              640: { slidesPerView: 3 },
-              768: { slidesPerView: 4 },
-              1024: { slidesPerView: 6 },
-            }}
-            className="movie-swiper"
-          >
-            {doramas.map((movie) => (
-              <SwiperSlide key={movie.id}>
-                <MovieCard 
-                  id={movie.id} 
-                  title={movie.title} 
-                  image={movie.poster_path} 
-                  trailerUrl={movie.trailer_url}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </section>
-
-        <section>
-          <h2 className="text-xl md:text-2xl font-bold mb-4 hover:text-gray-300 cursor-pointer inline-flex items-center gap-2 group">
-            {t('movies.action')}
-            <span className="text-xs text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity">Explore All ›</span>
-          </h2>
-          <Swiper
-            modules={[Navigation]}
-            navigation
-            spaceBetween={16}
-            slidesPerView={2}
-            breakpoints={{
-              640: { slidesPerView: 3 },
-              768: { slidesPerView: 4 },
-              1024: { slidesPerView: 6 },
-            }}
-            className="movie-swiper"
-          >
-            {actionMovies.map((movie) => (
-              <SwiperSlide key={movie.id}>
-                <MovieCard 
-                  id={movie.id} 
-                  title={movie.title} 
-                  image={movie.poster_path} 
-                  trailerUrl={movie.trailer_url}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </section>
-
-        <section>
-          <h2 className="text-xl md:text-2xl font-bold mb-4 hover:text-gray-300 cursor-pointer inline-flex items-center gap-2 group">
-            {t('movies.adventure')}
-            <span className="text-xs text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity">Explore All ›</span>
-          </h2>
-          <Swiper
-            modules={[Navigation]}
-            navigation
-            spaceBetween={16}
-            slidesPerView={2}
-            breakpoints={{
-              640: { slidesPerView: 3 },
-              768: { slidesPerView: 4 },
-              1024: { slidesPerView: 6 },
-            }}
-            className="movie-swiper"
-          >
-            {adventureMovies.map((movie) => (
-              <SwiperSlide key={movie.id}>
-                <MovieCard 
-                  id={movie.id} 
-                  title={movie.title} 
-                  image={movie.poster_path} 
-                  trailerUrl={movie.trailer_url}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </section>
-
-        <section>
-          <h2 className="text-xl md:text-2xl font-bold mb-4 hover:text-gray-300 cursor-pointer inline-flex items-center gap-2 group">
-            {t('movies.comedy')}
-            <span className="text-xs text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity">Explore All ›</span>
-          </h2>
-          <Swiper
-            modules={[Navigation]}
-            navigation
-            spaceBetween={16}
-            slidesPerView={2}
-            breakpoints={{
-              640: { slidesPerView: 3 },
-              768: { slidesPerView: 4 },
-              1024: { slidesPerView: 6 },
-            }}
-            className="movie-swiper"
-          >
-            {comedyMovies.map((movie) => (
-              <SwiperSlide key={movie.id}>
-                <MovieCard 
-                  id={movie.id} 
-                  title={movie.title} 
-                  image={movie.poster_path} 
-                  trailerUrl={movie.trailer_url}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </section>
-
-        <section>
-          <h2 className="text-xl md:text-2xl font-bold mb-4 hover:text-gray-300 cursor-pointer inline-flex items-center gap-2 group">
-            {t('movies.top_rated')}
-            <span className="text-xs text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity">Explore All ›</span>
-          </h2>
-          <Swiper
-            modules={[Navigation]}
-            navigation
-            spaceBetween={16}
-            slidesPerView={2}
-            breakpoints={{
-              640: { slidesPerView: 3 },
-              768: { slidesPerView: 4 },
-              1024: { slidesPerView: 6 },
-            }}
-            className="movie-swiper"
-          >
-            {[...movies].reverse().map((movie) => (
-              <SwiperSlide key={movie.id}>
-                <MovieCard 
-                  id={movie.id} 
-                  title={movie.title} 
-                  image={movie.poster_path} 
-                  trailerUrl={movie.trailer_url}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </section>
-
-        {/* Accordion Section */}
         <section className="pt-20 border-t border-white/5">
-           <Accordion />
+          <Accordion />
         </section>
       </div>
     </div>
